@@ -1,0 +1,6 @@
+{
+  "name": "理の塔 (Tower of Trivia)",
+  "description": "雑学クイズを素早く解いて敵を倒し、「理の塔」の遥かなる頂を目指すスピードクイズバトルRPG！",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
