@@ -564,7 +564,7 @@ export default function App() {
       </header>
 
       {/* メインビューポート: 高さを抑えスクロールしないように flex-1 調整 */}
-      <main className="flex-1 w-full max-w-4xl mx-auto p-3 flex flex-col justify-center z-10 relative overflow-hidden">
+      <main className="flex-1 w-full max-w-4xl mx-auto p-3 flex flex-col justify-center z-10 relative overflow-hidden min-h-0">
         <AnimatePresence mode="wait">
           {/* ==================== 1. スタート（タイトル）画面 ==================== */}
           {gameState === 'start' && (
@@ -660,7 +660,7 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-3 flex flex-col h-full justify-between"
+              className="space-y-3 flex flex-col flex-1 justify-between min-h-0 w-full"
             >
               {/* 2.1 プレイヤー＆タイマーステータスバー */}
               <div className="bg-[#111116] border border-[#2d2d35] px-4 py-2 flex justify-between items-center gap-3 relative shadow-md shrink-0">
@@ -716,7 +716,7 @@ export default function App() {
               </div>
 
               {/* 2.2 モンスター（敵）表示エリア: 高さを極力コンパクトに抑える */}
-              <div className="bg-[#111116] border border-[#2d2d35] p-3 flex flex-col items-center justify-center relative min-h-[140px] md:min-h-[160px] shadow-lg shrink-0">
+              <div className="bg-[#111116] border border-[#2d2d35] p-2 md:p-2.5 flex flex-col items-center justify-center relative min-h-[110px] md:min-h-[125px] shadow-lg shrink-0">
                 
                 {/* 階層アップ演出 */}
                 <AnimatePresence>
@@ -729,7 +729,7 @@ export default function App() {
                     >
                       <div className="text-center space-y-1">
                         <div className="text-[10px] text-[#c9a050] font-mono tracking-widest">FLOOR UNLOCKED</div>
-                        <div className="text-2xl font-serif text-white tracking-widest">
+                        <div className="text-xl font-serif text-white tracking-widest">
                           第 {floor} 階層 突入
                         </div>
                       </div>
@@ -754,10 +754,10 @@ export default function App() {
                   {damageDealt !== null && (
                     <motion.div
                       initial={{ opacity: 0, y: 10, scale: 0.6 }}
-                      animate={{ opacity: 1, y: -30, scale: 1.3 }}
-                      exit={{ opacity: 0, y: -60, scale: 1 }}
+                      animate={{ opacity: 1, y: -25, scale: 1.2 }}
+                      exit={{ opacity: 0, y: -50, scale: 1 }}
                       transition={{ duration: 0.7 }}
-                      className="absolute top-1/4 text-red-500 font-serif italic text-3xl drop-shadow-[0_4px_8px_rgba(239,68,68,0.4)] z-20 pointer-events-none"
+                      className="absolute top-1/4 text-red-500 font-serif italic text-2xl drop-shadow-[0_4px_8px_rgba(239,68,68,0.4)] z-20 pointer-events-none"
                     >
                       -{damageDealt}
                     </motion.div>
@@ -765,10 +765,10 @@ export default function App() {
                   {damageReceived !== null && (
                     <motion.div
                       initial={{ opacity: 0, y: -10, scale: 0.6 }}
-                      animate={{ opacity: 1, y: 30, scale: 1.3 }}
-                      exit={{ opacity: 0, y: 60, scale: 1 }}
+                      animate={{ opacity: 1, y: 25, scale: 1.2 }}
+                      exit={{ opacity: 0, y: 50, scale: 1 }}
                       transition={{ duration: 0.7 }}
-                      className="absolute top-1/2 text-rose-500 font-serif italic text-3xl drop-shadow-[0_4px_8px_rgba(244,63,94,0.4)] z-20 pointer-events-none"
+                      className="absolute top-1/2 text-rose-500 font-serif italic text-2xl drop-shadow-[0_4px_8px_rgba(244,63,94,0.4)] z-20 pointer-events-none"
                     >
                       痛恨 -{damageReceived}
                     </motion.div>
@@ -790,30 +790,30 @@ export default function App() {
                   }}
                   className="flex flex-col items-center"
                 >
-                  <div className="w-16 h-16 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-3 shadow-2xl shadow-black relative">
+                  <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
                     <div className="-rotate-45 flex items-center justify-center">
-                      <IconRenderer name={currentEnemy.iconName} className={`w-8 h-8 ${currentEnemy.color}`} />
+                      <IconRenderer name={currentEnemy.iconName} className={`w-6 h-6 ${currentEnemy.color}`} />
                     </div>
                   </div>
 
-                  <h3 className="text-base font-serif text-white flex items-center gap-1.5 leading-none">
-                    {currentEnemy.isBoss && <Crown className="w-4 h-4 text-[#c9a050] animate-pulse" />}
+                  <h3 className="text-sm font-serif text-white flex items-center gap-1.5 leading-none">
+                    {currentEnemy.isBoss && <Crown className="w-3.5 h-3.5 text-[#c9a050] animate-pulse" />}
                     {currentEnemy.name}
                   </h3>
                   
                   {/* 弱点表示 */}
-                  <div className="flex items-center gap-1.5 mt-1.5 bg-[#1a1a1f] border border-[#2d2d35] px-2 py-0.5 text-[10px]">
-                    <span className="text-[9px] text-[#8e8e93] uppercase font-mono tracking-wider">Weakness:</span>
+                  <div className="flex items-center gap-1.5 mt-1 bg-[#1a1a1f] border border-[#2d2d35] px-1.5 py-0.5 text-[9px]">
+                    <span className="text-[8px] text-[#8e8e93] uppercase font-mono tracking-wider">Weakness:</span>
                     <span className="text-[#c9a050] font-serif italic flex items-center gap-0.5">
-                      <IconRenderer name={GENRE_MAP[currentEnemy.weakness].icon} className="w-3 h-3" />
+                      <IconRenderer name={GENRE_MAP[currentEnemy.weakness].icon} className="w-2.5 h-2.5" />
                       {GENRE_MAP[currentEnemy.weakness].name}
                     </span>
                   </div>
                 </motion.div>
 
                 {/* 敵HPゲージ */}
-                <div className="w-full max-w-xs mt-3.5 space-y-0.5 z-10">
-                  <div className="flex justify-between text-[9px] uppercase font-mono tracking-widest text-[#8e8e93] px-1 leading-none">
+                <div className="w-full max-w-xs mt-2 space-y-0.5 z-10">
+                  <div className="flex justify-between text-[8px] uppercase font-mono tracking-widest text-[#8e8e93] px-1 leading-none">
                     <span>HP {currentEnemy.hp} / {currentEnemy.maxHp}</span>
                     <span>LV. {floor}</span>
                   </div>
@@ -821,6 +821,7 @@ export default function App() {
                     <motion.div 
                       animate={{ width: `${(currentEnemy.hp / currentEnemy.maxHp) * 100}%` }}
                       className="h-full bg-gradient-to-r from-red-600 to-[#c9a050]" 
+                      transition={{ duration: 0.3 }}
                     />
                   </div>
                 </div>
@@ -863,82 +864,90 @@ export default function App() {
                 </div>
 
                 {/* 問題文: 縦スクロールが発生しないよう文字サイズと余白を最適化 */}
-                <div className="flex-1 flex items-center justify-center overflow-y-auto px-2 min-h-0">
-                  <p className="text-lg md:text-xl font-serif text-center leading-relaxed text-[#f0f0f0] my-auto">
+                <div className="flex-1 flex items-center justify-center overflow-y-auto px-2 min-h-[60px] md:min-h-[80px]">
+                  <p className="text-base md:text-lg font-serif text-center leading-relaxed text-[#f0f0f0] my-auto">
                     「{currentQuestion.question}」
                   </p>
                 </div>
 
-                {/* 4択選択肢: グリッドを縮小 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 shrink-0">
-                  {currentQuestion.options.map((option, idx) => {
-                    const isSelected = selectedOption === idx;
-                    const isCorrect = currentQuestion.answerIndex === idx;
-                    
-                    const optionLabels = ['A', 'B', 'C', 'D'];
-                    let btnStyle = "bg-[#1a1a1f] border-[#2d2d35] text-slate-200 hover:border-[#c9a050]";
-                    let labelStyle = "border-[#2d2d35] text-[#5a5a60]";
-
-                    if (selectedOption !== null) {
-                      if (isCorrect) {
-                        btnStyle = "bg-emerald-500/10 border-emerald-500 text-emerald-400";
-                        labelStyle = "border-emerald-400 text-emerald-400 bg-emerald-500/10";
-                      } else if (isSelected) {
-                        btnStyle = "bg-red-500/10 border-red-500 text-red-400";
-                        labelStyle = "border-red-400 text-red-400 bg-red-500/10";
-                      } else {
-                        btnStyle = "bg-[#111116] border-[#1a1a1f] text-[#5a5a60] cursor-not-allowed";
-                        labelStyle = "border-[#1a1a1f] text-[#5a5a60]";
-                      }
-                    }
-
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => handleAnswerSubmit(idx)}
-                        disabled={selectedOption !== null || showFeedback || isPaused}
-                        className={`group flex items-center p-3 rounded-none text-left border transition-all duration-150 cursor-pointer ${btnStyle}`}
-                        id={`btn-option-${idx}`}
-                      >
-                        <span className={`w-6.5 h-6.5 flex items-center justify-center border font-mono text-xs mr-3 transition-colors shrink-0 ${labelStyle}`}>
-                          {optionLabels[idx]}
-                        </span>
-                        <span className="text-xs md:text-sm font-serif line-clamp-2 leading-tight">{option}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* 正解/不正解時の解説と強制自動進行カウントダウン表示 */}
-                <AnimatePresence>
-                  {showFeedback && (
+                {/* 選択肢と解説エリアの交互切替 */}
+                <AnimatePresence mode="wait">
+                  {!showFeedback ? (
                     <motion.div
-                      initial={{ opacity: 0, y: 5 }}
+                      key="options-grid"
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      className="border-t border-[#2d2d35] pt-2 mt-2 space-y-2 shrink-0"
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-auto shrink-0"
+                    >
+                      {currentQuestion.options.map((option, idx) => {
+                        const isSelected = selectedOption === idx;
+                        const isCorrect = currentQuestion.answerIndex === idx;
+                        
+                        const optionLabels = ['A', 'B', 'C', 'D'];
+                        let btnStyle = "bg-[#1a1a1f] border-[#2d2d35] text-slate-200 hover:border-[#c9a050]";
+                        let labelStyle = "border-[#2d2d35] text-[#5a5a60]";
+
+                        if (selectedOption !== null) {
+                          if (isCorrect) {
+                            btnStyle = "bg-emerald-500/10 border-emerald-500 text-emerald-400";
+                            labelStyle = "border-emerald-400 text-emerald-400 bg-emerald-500/10";
+                          } else if (isSelected) {
+                            btnStyle = "bg-red-500/10 border-red-500 text-red-400";
+                            labelStyle = "border-red-400 text-red-400 bg-red-500/10";
+                          } else {
+                            btnStyle = "bg-[#111116] border-[#1a1a1f] text-[#5a5a60] cursor-not-allowed";
+                            labelStyle = "border-[#1a1a1f] text-[#5a5a60]";
+                          }
+                        }
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleAnswerSubmit(idx)}
+                            disabled={selectedOption !== null || showFeedback || isPaused}
+                            className={`group flex items-center p-2.5 rounded-none text-left border transition-all duration-150 cursor-pointer ${btnStyle}`}
+                            id={`btn-option-${idx}`}
+                          >
+                            <span className={`w-6 h-6 flex items-center justify-center border font-mono text-xs mr-3 transition-colors shrink-0 ${labelStyle}`}>
+                              {optionLabels[idx]}
+                            </span>
+                            <span className="text-xs md:text-sm font-serif line-clamp-2 leading-tight">{option}</span>
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="feedback-area"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="border border-[#2d2d35] bg-[#1a1a24]/40 p-3 md:p-4 space-y-3 shrink-0 flex flex-col justify-between"
                     >
                       <div className="flex items-start gap-3">
-                        <div className={`p-1.5 border shrink-0 ${
+                        <div className={`p-2 border shrink-0 ${
                           feedbackType === 'correct' 
                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
                             : 'bg-red-500/10 border-red-500/30 text-red-400'
                         }`}>
-                          {feedbackType === 'correct' ? <Smile className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
+                          {feedbackType === 'correct' ? <Smile className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
                         </div>
-                        <div className="space-y-0.5 flex-1 min-w-0">
-                          <div className="flex justify-between items-baseline gap-2">
-                            <div className={`text-xs font-serif italic ${feedbackType === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <div className="space-y-2 flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                            <div className={`text-sm font-serif font-bold ${feedbackType === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
                               {feedbackType === 'correct' 
                                 ? `正解。見事。${damageDealt !== null ? `[ダメージ: ${damageDealt}]` : ''}` 
                                 : feedbackType === 'timeout' 
                                 ? `思考切れ。敵の痛撃！` 
-                                : `不正解。正しい理は「${currentQuestion.options[currentQuestion.answerIndex]}」です。`}
+                                : `不正解。`}
                             </div>
 
                             {/* 自動進行タイマーのバッジ */}
                             {autoProgressTimeLeft !== null && (
-                              <span className={`text-[10px] font-mono px-1.5 py-0.5 animate-pulse shrink-0 border ${
+                              <span className={`text-[10px] font-mono px-2 py-0.5 animate-pulse shrink-0 border rounded-sm w-fit ${
                                 feedbackType === 'correct'
                                   ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
                                   : 'text-red-400 bg-red-500/10 border-red-500/20'
@@ -947,14 +956,31 @@ export default function App() {
                               </span>
                             )}
                           </div>
-                          <p className="text-[10px] text-[#8e8e93] leading-relaxed font-serif italic line-clamp-2">
+
+                          {/* 自分が選んだ選択肢と正解の対比を表示 */}
+                          <div className="text-[11px] font-sans flex flex-col sm:flex-row sm:gap-x-4 gap-y-1 py-1 border-y border-[#2d2d35]/40 text-[#8e8e93]">
+                            <div className="truncate">
+                              あなたの回答: <span className={feedbackType === 'correct' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                                {selectedOption !== null ? currentQuestion.options[selectedOption] : '未回答（時間切れ）'}
+                              </span>
+                            </div>
+                            {feedbackType !== 'correct' && (
+                              <div className="truncate">
+                                正解の理: <span className="text-emerald-400 font-bold">
+                                  {currentQuestion.options[currentQuestion.answerIndex]}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          <p className="text-xs text-[#8e8e93] leading-relaxed font-serif italic">
                             {currentQuestion.explanation}
                           </p>
                         </div>
                       </div>
 
                       {/* 次へ進むボタン */}
-                      <div className="flex justify-end pt-1">
+                      <div className="flex justify-end pt-1 border-t border-[#2d2d35]/30">
                         {currentEnemy.hp <= 0 ? (
                           <button
                             onClick={proceedToNextFloor}
