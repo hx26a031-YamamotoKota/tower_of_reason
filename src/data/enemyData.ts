@@ -7,11 +7,12 @@ export interface EnemyTemplate {
   glowColor: string; // ネオンエフェクト用の色 (e.g. 'shadow-red-500/50')
   baseHp: number;
   description: string;
+  imageToken?: string; // イラスト用のアセット識別トークン
 }
 
 export interface BossTemplate extends EnemyTemplate {
   floor: number;
-  questionTimeLimit: number; // ボス専用の1問あたり制限時間（秒）
+  questionTimeLimit: number; // ボス専用 of 1問あたり制限時間（秒）
 }
 
 export interface ActiveEnemy {
@@ -24,6 +25,7 @@ export interface ActiveEnemy {
   weakness: QuizQuestion['genre'];
   description: string;
   isBoss: boolean;
+  imageToken?: string; // イラスト用のアセット識別トークン
 }
 
 // 雑魚敵のテンプレート
@@ -35,6 +37,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-blue-500/40',
     baseHp: 30,
     description: '塔の入り口に群れる、知能の低いプルプルした魔物。',
+    imageToken: 'プチスライム',
   },
   {
     name: '知恵を拒むスケルトン',
@@ -43,6 +46,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-gray-500/40',
     baseHp: 40,
     description: '学ぶことを諦め、骨だけになって彷徨う戦士。',
+    imageToken: 'スケルトン',
   },
   {
     name: 'カースド・ブック',
@@ -51,6 +55,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-purple-500/40',
     baseHp: 35,
     description: '解読不可能な呪文が刻まれた、自我を持つ魔導書。',
+    imageToken: 'カースドブック',
   },
   {
     name: '惑わしのゴースト',
@@ -59,6 +64,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-teal-500/40',
     baseHp: 45,
     description: 'クイズの回答者を惑わせる、いたずら好きな幽霊。',
+    imageToken: 'ゴースト',
   },
   {
     name: 'イビル・アイ',
@@ -67,6 +73,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-red-500/40',
     baseHp: 50,
     description: '世界の全てを監視し、知識を吸い取る一つ目の怪物。',
+    imageToken: 'イビルアイ',
   },
   {
     name: 'フレイム・スピリット',
@@ -74,7 +81,8 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     color: 'text-orange-400',
     glowColor: 'shadow-orange-500/40',
     baseHp: 45,
-    description: '感情の赴くままに全てを焼き尽くす、焦燥の火の玉。',
+    description: '感情の赴くままに全てを焼き尽くす、焦燥 of 火の玉。',
+    imageToken: 'ファイアスピリット',
   },
   {
     name: 'アイス・クラウン',
@@ -82,7 +90,8 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     color: 'text-cyan-300',
     glowColor: 'shadow-cyan-500/40',
     baseHp: 55,
-    description: '思考を凍りつかせ、判断力を奪う絶対零度の妖精。',
+    description: '思考を凍りつかせ、判断力を奪う絶対零度 of 妖精。',
+    imageToken: 'アイスクラウン',
   },
   {
     name: 'シャドウ・サーペント',
@@ -91,6 +100,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-emerald-500/40',
     baseHp: 60,
     description: '影に潜み、回答者の心の隙を狙う狡猾な大蛇。',
+    imageToken: 'サーペント',
   },
   {
     name: 'ミミック・チェスト',
@@ -107,6 +117,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-indigo-500/40',
     baseHp: 65,
     description: '他人の思考を糸で操り、間違った選択肢へと導く人形遣い。',
+    imageToken: 'パペッティア',
   },
 ];
 
@@ -210,6 +221,7 @@ export function generateEnemy(floor: number): ActiveEnemy {
       weakness,
       description: template.description,
       isBoss: false,
+      imageToken: template.imageToken,
     };
   }
 }

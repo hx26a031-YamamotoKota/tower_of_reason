@@ -790,11 +790,19 @@ export default function App() {
                   }}
                   className="flex flex-col items-center"
                 >
-                  <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
-                    <div className="-rotate-45 flex items-center justify-center">
-                      <IconRenderer name={currentEnemy.iconName} className={`w-6 h-6 ${currentEnemy.color}`} />
+                  {currentEnemy.imageToken ? (
+                    <MonsterImageRenderer 
+                      token={currentEnemy.imageToken} 
+                      color={currentEnemy.color} 
+                      fallbackIcon={currentEnemy.iconName} 
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
+                      <div className="-rotate-45 flex items-center justify-center">
+                        <IconRenderer name={currentEnemy.iconName} className={`w-6 h-6 ${currentEnemy.color}`} />
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <h3 className="text-sm font-serif text-white flex items-center gap-1.5 leading-none">
                     {currentEnemy.isBoss && <Crown className="w-3.5 h-3.5 text-[#c9a050] animate-pulse" />}
@@ -1390,3 +1398,51 @@ export default function App() {
     </div>
   );
 }
+
+// モンスターイラストを描画するコンポーネント（画像がない場合はLucideアイコンに自動フォールバック）
+const MonsterImageRenderer = ({ 
+  token, 
+  color, 
+  fallbackIcon 
+}: { 
+  token: string; 
+  color: string; 
+  fallbackIcon: string; 
+}) => {
+  const extensions = ['png', 'webp', 'jpg', 'jpeg'];
+  const [extIndex, setExtIndex] = useState(0);
+  const [hasFailed, setHasFailed] = useState(false);
+
+  const currentSrc = `/${token}.${extensions[extIndex]}`;
+
+  const handleImageError = () => {
+    if (extIndex < extensions.length - 1) {
+      setExtIndex((prev) => prev + 1);
+    } else {
+      setHasFailed(true);
+    }
+  };
+
+  if (hasFailed) {
+    return (
+      <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
+        <div className="-rotate-45 flex items-center justify-center">
+          <IconRenderer name={fallbackIcon} className={`w-6 h-6 ${color}`} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-1.5 bg-[#1a1a1f]/60 border border-[#c9a050]/30 rounded-lg p-1 overflow-hidden shadow-inner">
+      <img
+        src={currentSrc}
+        alt={token}
+        referrerPolicy="no-referrer"
+        onError={handleImageError}
+        className="max-w-full max-h-full object-contain drop-shadow-[0_0_8px_rgba(201,160,80,0.3)] animate-fade-in"
+      />
+    </div>
+  );
+};
+
