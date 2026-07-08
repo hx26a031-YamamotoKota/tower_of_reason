@@ -7,12 +7,12 @@ export interface EnemyTemplate {
   glowColor: string; // ネオンエフェクト用の色 (e.g. 'shadow-red-500/50')
   baseHp: number;
   description: string;
-  imageToken?: string; // イラスト用のアセット識別トークン
+  imagePath: string; // モンスター画像パス
 }
 
 export interface BossTemplate extends EnemyTemplate {
   floor: number;
-  questionTimeLimit: number; // ボス専用 of 1問あたり制限時間（秒）
+  questionTimeLimit: number; // ボス専用の1問あたり制限時間（秒）
 }
 
 export interface ActiveEnemy {
@@ -25,7 +25,7 @@ export interface ActiveEnemy {
   weakness: QuizQuestion['genre'];
   description: string;
   isBoss: boolean;
-  imageToken?: string; // イラスト用のアセット識別トークン
+  imagePath: string; // モンスター画像パス
 }
 
 // 雑魚敵のテンプレート
@@ -37,7 +37,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-blue-500/40',
     baseHp: 30,
     description: '塔の入り口に群れる、知能の低いプルプルした魔物。',
-    imageToken: 'プチスライム',
+    imagePath: '/enemy_image/Enemy_1.png',
   },
   {
     name: '知恵を拒むスケルトン',
@@ -46,7 +46,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-gray-500/40',
     baseHp: 40,
     description: '学ぶことを諦め、骨だけになって彷徨う戦士。',
-    imageToken: 'スケルトン',
+    imagePath: '/enemy_image/Enemy_2.png',
   },
   {
     name: 'カースド・ブック',
@@ -55,7 +55,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-purple-500/40',
     baseHp: 35,
     description: '解読不可能な呪文が刻まれた、自我を持つ魔導書。',
-    imageToken: 'カースドブック',
+    imagePath: '/enemy_image/Enemy_3.png',
   },
   {
     name: '惑わしのゴースト',
@@ -64,7 +64,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-teal-500/40',
     baseHp: 45,
     description: 'クイズの回答者を惑わせる、いたずら好きな幽霊。',
-    imageToken: 'ゴースト',
+    imagePath: '/enemy_image/Enemy_4.png',
   },
   {
     name: 'イビル・アイ',
@@ -73,7 +73,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-red-500/40',
     baseHp: 50,
     description: '世界の全てを監視し、知識を吸い取る一つ目の怪物。',
-    imageToken: 'イビルアイ',
+    imagePath: '/enemy_image/Enemy_5.png',
   },
   {
     name: 'フレイム・スピリット',
@@ -81,8 +81,8 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     color: 'text-orange-400',
     glowColor: 'shadow-orange-500/40',
     baseHp: 45,
-    description: '感情の赴くままに全てを焼き尽くす、焦燥 of 火の玉。',
-    imageToken: 'ファイアスピリット',
+    description: '感情の赴くままに全てを焼き尽くす、焦燥の火の玉。',
+    imagePath: '/enemy_image/Enemy_6.png',
   },
   {
     name: 'アイス・クラウン',
@@ -90,8 +90,8 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     color: 'text-cyan-300',
     glowColor: 'shadow-cyan-500/40',
     baseHp: 55,
-    description: '思考を凍りつかせ、判断力を奪う絶対零度 of 妖精。',
-    imageToken: 'アイスクラウン',
+    description: '思考を凍りつかせ、判断力を奪う絶対零度の妖精。',
+    imagePath: '/enemy_image/Enemy_7.png',
   },
   {
     name: 'シャドウ・サーペント',
@@ -100,7 +100,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-emerald-500/40',
     baseHp: 60,
     description: '影に潜み、回答者の心の隙を狙う狡猾な大蛇。',
-    imageToken: 'サーペント',
+    imagePath: '/enemy_image/Enemy_8.png',
   },
   {
     name: 'ミミック・チェスト',
@@ -109,6 +109,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-yellow-500/40',
     baseHp: 50,
     description: '宝箱に化けた魔物。クイズに答えないと開かない。',
+    imagePath: '/enemy_image/Enemy_10.png',
   },
   {
     name: 'ダーク・パペッティア',
@@ -117,7 +118,7 @@ export const NORMAL_ENEMIES: EnemyTemplate[] = [
     glowColor: 'shadow-indigo-500/40',
     baseHp: 65,
     description: '他人の思考を糸で操り、間違った選択肢へと導く人形遣い。',
-    imageToken: 'パペッティア',
+    imagePath: '/enemy_image/Enemy_9.png',
   },
 ];
 
@@ -132,6 +133,7 @@ export const BOSS_ENEMIES: Record<number, BossTemplate> = {
     baseHp: 150,
     questionTimeLimit: 7, // 制限時間7秒
     description: '論理の石で組み上げられた巨大な守護兵。生半可な知識は通用しない。',
+    imagePath: '/enemy_image/Boss_1.png',
   },
   20: {
     floor: 20,
@@ -142,6 +144,7 @@ export const BOSS_ENEMIES: Record<number, BossTemplate> = {
     baseHp: 250,
     questionTimeLimit: 6, // 制限時間6秒
     description: 'あらゆる情報の残骸が融合した、荒れ狂う混沌の合成獣。',
+    imagePath: '/enemy_image/Boss_2.png',
   },
   30: {
     floor: 30,
@@ -152,6 +155,7 @@ export const BOSS_ENEMIES: Record<number, BossTemplate> = {
     baseHp: 380,
     questionTimeLimit: 5.5, // 制限時間5.5秒
     description: '数万冊の魔導書を修め、真理を追い求めて狂気に堕ちた偉大なる魔術師。',
+    imagePath: '/enemy_image/Boss_3.png',
   },
   40: {
     floor: 40,
@@ -162,6 +166,7 @@ export const BOSS_ENEMIES: Record<number, BossTemplate> = {
     baseHp: 500,
     questionTimeLimit: 5, // 制限時間5秒
     description: '理の塔に古くから棲まう、無限の叡智と破壊の炎を持つ伝説の古竜。',
+    imagePath: '/enemy_image/Boss_4.png',
   },
   50: {
     floor: 50,
@@ -172,6 +177,7 @@ export const BOSS_ENEMIES: Record<number, BossTemplate> = {
     baseHp: 750,
     questionTimeLimit: 4, // 制限時間4秒
     description: '時間と空間、そして全宇宙の雑学を支配する、理の塔の主にして究極の絶対神。',
+    imagePath: '/enemy_image/Boss_5.png',
   },
 };
 
@@ -202,6 +208,7 @@ export function generateEnemy(floor: number): ActiveEnemy {
       weakness,
       description: template.description,
       isBoss: true,
+      imagePath: template.imagePath,
     };
   } else {
     // 雑魚敵をランダムに選択
@@ -221,7 +228,7 @@ export function generateEnemy(floor: number): ActiveEnemy {
       weakness,
       description: template.description,
       isBoss: false,
-      imageToken: template.imageToken,
+      imagePath: template.imagePath,
     };
   }
 }

@@ -209,6 +209,35 @@ export default function App() {
     };
   }, [gameState, isPaused, autoProgressTimeLeft, currentEnemy]);
 
+  // --- デバッグ用キーボード操作 (Kキーで即座に正解を選択) ---
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+
+      if (e.key === 'k' || e.key === 'K') {
+        if (
+          gameState === 'battle' && 
+          !isPaused && 
+          currentQuestion && 
+          selectedOption === null && 
+          !showFeedback
+        ) {
+          handleAnswerSubmit(currentQuestion.answerIndex);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [gameState, isPaused, currentQuestion, selectedOption, showFeedback]);
+
   // --- ゲーム開始 ---
   const startGame = () => {
     sound.playClick();
@@ -715,8 +744,8 @@ export default function App() {
                 </div>
               </div>
 
-              {/* 2.2 モンスター（敵）表示エリア: 高さを極力コンパクトに抑える */}
-              <div className="bg-[#111116] border border-[#2d2d35] p-2 md:p-2.5 flex flex-col items-center justify-center relative min-h-[110px] md:min-h-[125px] shadow-lg shrink-0">
+              {/* 2.2 モンスター（敵）表示エリア: 左右にレイアウトを分割し、グラフィックを大きく表示 */}
+              <div className="bg-[#111116] border border-[#2d2d35] p-3 md:p-3.5 flex flex-row items-center justify-center gap-4 md:gap-6 relative min-h-[120px] md:min-h-[140px] shadow-lg shrink-0 w-full overflow-hidden">
                 
                 {/* 階層アップ演出 */}
                 <AnimatePresence>
@@ -775,7 +804,7 @@ export default function App() {
                   )}
                 </AnimatePresence>
 
-                {/* 敵ビジュアル（コンパクト化） */}
+                {/* 左側: 敵グラフィック（サイズをアップ、浮遊/攻撃アニメーション付き） */}
                 <motion.div
                   animate={
                     isEnemyAttacking 
@@ -788,51 +817,50 @@ export default function App() {
                     y: { repeat: Infinity, duration: 3, ease: "easeInOut" },
                     default: { duration: 0.4 } 
                   }}
-                  className="flex flex-col items-center"
+                  className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0 relative"
                 >
-                  {currentEnemy.imageToken ? (
-                    <MonsterImageRenderer 
-                      token={currentEnemy.imageToken} 
-                      color={currentEnemy.color} 
-                      fallbackIcon={currentEnemy.iconName} 
-                    />
-                  ) : (
-                    <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
-                      <div className="-rotate-45 flex items-center justify-center">
-                        <IconRenderer name={currentEnemy.iconName} className={`w-6 h-6 ${currentEnemy.color}`} />
-                      </div>
-                    </div>
-                  )}
-
-                  <h3 className="text-sm font-serif text-white flex items-center gap-1.5 leading-none">
-                    {currentEnemy.isBoss && <Crown className="w-3.5 h-3.5 text-[#c9a050] animate-pulse" />}
-                    {currentEnemy.name}
-                  </h3>
-                  
-                  {/* 弱点表示 */}
-                  <div className="flex items-center gap-1.5 mt-1 bg-[#1a1a1f] border border-[#2d2d35] px-1.5 py-0.5 text-[9px]">
-                    <span className="text-[8px] text-[#8e8e93] uppercase font-mono tracking-wider">Weakness:</span>
-                    <span className="text-[#c9a050] font-serif italic flex items-center gap-0.5">
-                      <IconRenderer name={GENRE_MAP[currentEnemy.weakness].icon} className="w-2.5 h-2.5" />
-                      {GENRE_MAP[currentEnemy.weakness].name}
-                    </span>
-                  </div>
+                  <img 
+                    src={currentEnemy.imagePath} 
+                    alt={currentEnemy.name} 
+                    className="w-full h-full object-contain filter drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)] drop-shadow-[0_0_16px_rgba(201,160,80,0.35)]"
+                    referrerPolicy="no-referrer"
+                  />
                 </motion.div>
 
-                {/* 敵HPゲージ */}
-                <div className="w-full max-w-xs mt-2 space-y-0.5 z-10">
-                  <div className="flex justify-between text-[8px] uppercase font-mono tracking-widest text-[#8e8e93] px-1 leading-none">
-                    <span>HP {currentEnemy.hp} / {currentEnemy.maxHp}</span>
-                    <span>LV. {floor}</span>
+                {/* 右側: 敵ステータス情報 (名前, 弱点, HPゲージ) */}
+                <div className="flex-1 max-w-sm flex flex-col justify-center space-y-2.5 z-10">
+                  <div className="space-y-1">
+                    <h3 className="text-sm md:text-base font-serif text-white flex items-center gap-1.5 leading-none">
+                      {currentEnemy.isBoss && <Crown className="w-4 h-4 text-[#c9a050] animate-pulse shrink-0" />}
+                      <span className="font-bold tracking-wide">{currentEnemy.name}</span>
+                    </h3>
+                    
+                    {/* 弱点表示 */}
+                    <div className="flex items-center gap-1.5 bg-[#1a1a1f] border border-[#2d2d35] px-2 py-0.5 text-[9px] w-fit rounded-sm">
+                      <span className="text-[8px] text-[#8e8e93] uppercase font-mono tracking-wider">Weakness:</span>
+                      <span className="text-[#c9a050] font-serif italic flex items-center gap-0.5">
+                        <IconRenderer name={GENRE_MAP[currentEnemy.weakness].icon} className="w-2.5 h-2.5" />
+                        {GENRE_MAP[currentEnemy.weakness].name}
+                      </span>
+                    </div>
                   </div>
-                  <div className="h-1 bg-[#1a1a1f] border border-[#2d2d35] overflow-hidden">
-                    <motion.div 
-                      animate={{ width: `${(currentEnemy.hp / currentEnemy.maxHp) * 100}%` }}
-                      className="h-full bg-gradient-to-r from-red-600 to-[#c9a050]" 
-                      transition={{ duration: 0.3 }}
-                    />
+
+                  {/* 敵HPゲージ */}
+                  <div className="space-y-1 w-full">
+                    <div className="flex justify-between text-[8px] md:text-[9px] uppercase font-mono tracking-widest text-[#8e8e93] px-0.5 leading-none">
+                      <span>HP {currentEnemy.hp} / {currentEnemy.maxHp}</span>
+                      <span>LV. {floor}</span>
+                    </div>
+                    <div className="h-1.5 bg-[#1a1a1f] border border-[#2d2d35] overflow-hidden rounded-full">
+                      <motion.div 
+                        animate={{ width: `${(currentEnemy.hp / currentEnemy.maxHp) * 100}%` }}
+                        className="h-full bg-gradient-to-r from-red-600 to-[#c9a050]" 
+                        transition={{ duration: 0.3 }}
+                      />
+                    </div>
                   </div>
                 </div>
+
               </div>
 
               {/* 2.3 クイズ＆問題回答エリア: 高さを抑えてPC一画面に収める */}
@@ -1398,51 +1426,3 @@ export default function App() {
     </div>
   );
 }
-
-// モンスターイラストを描画するコンポーネント（画像がない場合はLucideアイコンに自動フォールバック）
-const MonsterImageRenderer = ({ 
-  token, 
-  color, 
-  fallbackIcon 
-}: { 
-  token: string; 
-  color: string; 
-  fallbackIcon: string; 
-}) => {
-  const extensions = ['png', 'webp', 'jpg', 'jpeg'];
-  const [extIndex, setExtIndex] = useState(0);
-  const [hasFailed, setHasFailed] = useState(false);
-
-  const currentSrc = `/${token}.${extensions[extIndex]}`;
-
-  const handleImageError = () => {
-    if (extIndex < extensions.length - 1) {
-      setExtIndex((prev) => prev + 1);
-    } else {
-      setHasFailed(true);
-    }
-  };
-
-  if (hasFailed) {
-    return (
-      <div className="w-12 h-12 bg-[#1a1a1f] border border-[#c9a050] rotate-45 flex items-center justify-center mb-1.5 shadow-2xl shadow-black relative">
-        <div className="-rotate-45 flex items-center justify-center">
-          <IconRenderer name={fallbackIcon} className={`w-6 h-6 ${color}`} />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-1.5 bg-[#1a1a1f]/60 border border-[#c9a050]/30 rounded-lg p-1 overflow-hidden shadow-inner">
-      <img
-        src={currentSrc}
-        alt={token}
-        referrerPolicy="no-referrer"
-        onError={handleImageError}
-        className="max-w-full max-h-full object-contain drop-shadow-[0_0_8px_rgba(201,160,80,0.3)] animate-fade-in"
-      />
-    </div>
-  );
-};
-
